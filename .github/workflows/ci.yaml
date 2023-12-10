@@ -1,17 +1,22 @@
 name: ci-javascript-workflow
 on:
+  push:
+    branches:
+      - develop
   pull_request:
     branches:
       - develop
 
 jobs:
   check-app:
+    strategy:
+      matrix:
+        node: [16, 18]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: ${{ matrix.node }}
       - run: npm install
       - run: npm run test
-      - run: node index.js
